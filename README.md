@@ -1,3 +1,4 @@
+Authors: Charles
 # GitFitCode Pair Coding Challenge!
 
 ## Covid Movie Seat Booking
