@@ -1,7 +1,5 @@
 # GitFitCode Pair Coding Challenge!
 
-* Dane 
-
 ## Covid Movie Seat Booking
 
 Since we are dealing with Covid-19, lets go ahead and pretend we are able to see some of our favorite movies! Identify 5 movies, that each of you would like to watch, and determine some cost for that movie. The goal is to display the movie choices and seats in a theater to select from so y'all are able to purchase your imaginary tickets!
