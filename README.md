@@ -1,6 +1,7 @@
 Authors: 
 Charles Mesias
 Juan Villaman
+Dane Neves
 
 # GitFitCode Pair Coding Challenge!
 
