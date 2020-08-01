@@ -1,3 +1,5 @@
+Juan Villaman
+
 # GitFitCode Pair Coding Challenge!
 
 ## Covid Movie Seat Booking
