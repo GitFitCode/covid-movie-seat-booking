@@ -1,4 +1,4 @@
-Authors: Charles
+Authors: Charles Mesias
 # GitFitCode Pair Coding Challenge!
 
 ## Covid Movie Seat Booking
