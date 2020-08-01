@@ -3,6 +3,7 @@ Charles Mesias
 Juan Villaman
 Dane Neves 
 Justin Sineath
+Eddie Gutierrez
 
 # GitFitCode Pair Coding Challenge!
 
