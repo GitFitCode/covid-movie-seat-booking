@@ -1,3 +1,5 @@
+Authors: 
+Charles Mesias
 Juan Villaman
 
 # GitFitCode Pair Coding Challenge!
