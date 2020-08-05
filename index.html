@@ -9,10 +9,17 @@
 </head>
 <body>
   <h1>Covid Movie Seat Booking</h1>
-  <p>Pick your seats</p>
   <div id="container">
     <section id="ticketCounter">
-
+      <label for="movies">Pick which showing: </label>
+      <select name="movies" id="movies" >
+        <option value="" disabled selected>Movies:</option>
+        <option value="0">Wedding Crashers</option>
+        <option value="1">Ratatouille</option>
+        <option value="2">Pulp Fiction</option>
+        <option value="3">Lion King</option>
+        <option value="4">Vertigo</option>
+      </select>
     </section>
     <section id="seats">
       <table>
