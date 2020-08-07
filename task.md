@@ -9,6 +9,8 @@ Calculating tool to add up costs and # of tickets
 
 - - -
 
+NOTE: Why movie vs currentMovieSelected
+
 
 ## TODO List:
 * Run through the todo list together and evaluate:
@@ -30,6 +32,12 @@ Calculating tool to add up costs and # of tickets
 
 ### Later:
 * Calculator Section - Display # of seats selected and total price $
+
+* B4 changing movies, confirm w/ user to purchase 
+  * change selected seats back to unoccupied if no purchase made
+  * allow user to clear occupied seats ... back to default 
+  * localStorage management 
+
 * Movie Select Section - Display list of movies to choose from
 
 * Update CSS visuals
