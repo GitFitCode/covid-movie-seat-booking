@@ -4,14 +4,17 @@
   height: 100%;
   align-items: flex-start;
   flex-direction: row;
+  justify-content: center;
+}
+h1{
+  display: flex;
+  justify-content: center;
 }
 #ticketCounter{
   display: flex;
   flex-direction: column;
   width: 20%;
-  height: 800px;
   padding: 2%;
-  /*Just for dev purposes*/
   border: solid 1px black;
 }
 #seats{
@@ -19,9 +22,6 @@
   align-items: center;
   justify-content: center;
   width: 60%;
-  height: 800px;
-  /*Just for dev purposes*/
-  border: solid 1px black;
 }
 #seats table{
   display: flex;
@@ -56,4 +56,10 @@
 #movies {
   height: 50px;
   margin: 5px;
+}
+
+.purchased{
+
+  background-color: lightblue;
+
 }
