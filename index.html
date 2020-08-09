@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="seats.js" defer></script>
+    <link rel="stylesheet" href="styles.css">
+    <title>Covid Movie Seat Booking</title>
+</head>
+<body>
+  <h1>Covid Movie Seat Booking</h1>
+  <div id="container">
+    <section id="ticketCounter">
+      <label for="movies">Pick which showing: </label>
+      <select name="movies" id="movies" >
+        <option value="" disabled selected>Movies:</option>
+        <option value="0">Wedding Crashers</option>
+        <option value="1">Ratatouille</option>
+        <option value="2">Pulp Fiction</option>
+        <option value="3">Lion King</option>
+        <option value="4">Vertigo</option>
+      </select>
+      <section>
+        <label id="quantity">0</label>
+        <label>tickets @</label>
+        <label id="pricePerTicket">$0.00</label>
+        <label>Total:</label>
+        <label id="totalPrice">$0.00</label>
+        <br><br>
+        <button id='purchase'>Purchase Tickets</button>
+        <br><br><br><br>
+        <button id="clearLocalStorage">Clear all movie storage</button>
+      </section>
+    </section>
+    <section id="seats">
+      <table>
+        <tbody>
+          <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+          </tr>
+          <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+          </tr>
+          <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+          </tr>
+          <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+  </div>
+    
+</body>
+</html>

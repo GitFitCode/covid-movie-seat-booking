@@ -1,3 +1,10 @@
+Authors: 
+Charles Mesias
+Juan Villaman
+Dane Neves 
+Justin Sineath
+Eddie Gutierrez
+
 # GitFitCode Pair Coding Challenge!
 
 ## Covid Movie Seat Booking
