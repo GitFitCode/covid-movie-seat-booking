@@ -47,7 +47,7 @@ const purchaseButton = document.getElementById('purchase');
 const clearLocalStorage = document.getElementById('clearLocalStorage');
 
 //Non-HTML Global Variables
-//selected seats not purchased (to be pushed into seatsOccupied)
+//selected seats not purchased (to be pushed into seatsOccupied)`````````````````
 let userSelectedSeats = []; 
 let currentMovieSelected;
 let ticketCounter = 0;
@@ -55,7 +55,7 @@ let ticketCounter = 0;
 //(ie set up clickListeners only on first)
 let movieSelectOnChangeCount = 0;
 let movieSelected;
-//true defualt (when no seats selected) so no alerts given
+//true default (when no seats selected) so no alerts given
 let ticketsPurchased = true;
 
 
@@ -63,52 +63,66 @@ let ticketsPurchased = true;
 //Select which movie
 moviesSelectValue.onchange = function() {
   //no alert for first movie select
-  if (movieSelectOnChangeCount === 0){
-    purchaseButton.disabled = false;
-    swapMovies.call(this);
-    movieSelected = moviesSelectValue.value;
-  }
-  else if (movieSelectOnChangeCount > 0) {
-    //tickets not yet purchased
-    if (!ticketsPurchased) {
-      const confirmStatus = confirm(`Do you want to buy these tickets for $${(parseFloat(currentMovieSelected.price) * ticketCounter).toFixed(2)}?`);
-      if (confirmStatus){
-        //reset html dropdown
-        movieSelected = moviesSelectValue.value;
-        // if purchased, push to movie
-        currentMovieSelected.seatsOccupied = currentMovieSelected.seatsOccupied.concat(userSelectedSeats);
-        
-        alert(`Total was $${(parseFloat(currentMovieSelected.price) * ticketCounter).toFixed(2)}. Thank you for your purchase!`);
-        swapMovies.call(this);
-        userSelectedSeats = [];
-        updateLocalStorage();
-      } else {
-        moviesSelectValue.value = movieSelected;
-      }
-    }
-    //if purchased, push to movie (ie purchased button already pressed)
-    else {
-      movieSelected = moviesSelectValue.value;
-      currentMovieSelected.seatsOccupied = currentMovieSelected.seatsOccupied.concat(userSelectedSeats);
-      userSelectedSeats = [];
-      swapMovies.call(this);
-    }
-  }
-  
-  //setting up our tickets, prices, and totals
-  function swapMovies() {
-    ticketCounter = 0;
-    ticketQuantityLabel.innerText = ticketCounter;
-    ticketPriceLabel.innerText = `$${movieObjects[this.value].price}`;
-    totalPriceLabel.innerText = '$0.00';
+  if (movieSelectOnChangeCount === 0) {
 
-    movieSelectOnChangeCount++;
-    currentMovieSelected = movieObjects[this.value];
-    //pass in selected movie object and change count
-    setUpSeatSection(movieObjects[this.value], movieSelectOnChangeCount);
-    ticketsPurchased = true;
-    purchaseButton.className = '';
+    purchaseButton.disabled = false;
+    updateMovieValues.call(this); //'this' is the movie object that we select with onchange
   }
+  //tickets not yet purchased
+  if (!ticketsPurchased) {
+
+    onMovieChangeAndTicketsSelected();
+  }
+  //if purchased or no tickets selected, push to movie (ie purchased button already pressed)
+  else {
+    
+    updateMovieValues.call(this);
+  }
+}
+
+function updateMovieValues() {
+
+  movieSelected = moviesSelectValue.value;
+  swapMovies.call(this); //'this' is the movie object that we select with onchange
+  currentMovieSelected.seatsOccupied = currentMovieSelected.seatsOccupied.concat(userSelectedSeats);
+  userSelectedSeats = [];
+}
+
+function onMovieChangeAndTicketsSelected() {
+
+  const confirmStatus = confirm(`Do you want to buy these tickets for $${(parseFloat(currentMovieSelected.price) * ticketCounter).toFixed(2)}?`);
+  if (confirmStatus){
+
+    //reset html dropdown
+    updateMovieValues.call(this);
+    
+    alert(`Total was $${(parseFloat(currentMovieSelected.price) * ticketCounter).toFixed(2)}. Thank you for your purchase!`);
+    updateLocalStorage();
+  } else {
+    
+    moviesSelectValue.value = movieSelected;
+  }
+}
+
+//setting up our tickets, prices, and totals
+function swapMovies() {
+
+  updateHtmlTextValues();
+
+  movieSelectOnChangeCount++;
+  currentMovieSelected = movieObjects[this.value];
+  //pass in selected movie object and change count
+  setUpSeatSection(movieObjects[this.value], movieSelectOnChangeCount);
+  ticketsPurchased = true;
+  purchaseButton.className = '';
+}
+
+function updateHtmlTextValues() {
+  
+  ticketCounter = 0;
+  ticketQuantityLabel.innerText = ticketCounter;
+  ticketPriceLabel.innerText = `$${movieObjects[this.value].price}`;
+  totalPriceLabel.innerText = '$0.00';
 }
 
 //iterate over each seat & apply classes
@@ -142,7 +156,7 @@ function setUpSeatSection(movie, movieSelectOnChangeCount) {
   }
 }
 
-function selectASeat(seatTableData){  
+function selectASeat(seatTableData) {  
   /*add clickListener:
   - check if seat is already occupied (don't add to seatsOccupied)
   - apply selectedSeat class/color
