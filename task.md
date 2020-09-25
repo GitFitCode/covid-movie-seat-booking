@@ -1,4 +1,4 @@
-
+TODO - should add more appealing visuals
 # Description of Setup & User Loop #
 
 The user selects a movie that they would like to watch. Then select the seats they would like to sit in. They are allowed to deselect seats if they change their mind and also be able to see the price and what their total is based on how many seats they have chosen.  Then there is 2 options to purchase tickets.  If they select the 'Purchase Tickets' button they are alerted with a "Thank You" message, the other option would be to try and switch to another movie while they have seats selected, they get an alert asking if they would like to buy the seats or cancel the order.  
