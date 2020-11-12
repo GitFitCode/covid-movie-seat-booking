@@ -62,76 +62,73 @@ let ticketsPurchased = true;
 //Major Functions:
 //Select which movie
 moviesSelectValue.onchange = function() {
+  const movieSelected = moviesSelectValue.value;
+
   //no alert for first movie select
   if (movieSelectOnChangeCount === 0) {
-
-    purchaseButton.disabled = false;
-    updateMovieValues.call(this); //'this' is the movie object that we select with onchange
+    swapMovies(movieSelected);
+    updateMovieValues(movieSelected);
+    updateHtmlTextValues(movieSelected);
   }
-  //tickets not yet purchased
-  if (!ticketsPurchased) {
-
-    onMovieChangeAndTicketsSelected();
-  }
-  //if purchased or no tickets selected, push to movie (ie purchased button already pressed)
   else {
-    
-    updateMovieValues.call(this);
+    //tickets not yet purchased
+    if (!ticketsPurchased) {
+      onMovieChangeAndTicketsSelected();
+    }
+    updateHtmlTextValues(movieSelected);
+    swapMovies(movieSelected);
+    updateMovieValues(movieSelected);
   }
 }
 
-function updateMovieValues() {
-
-  movieSelected = moviesSelectValue.value;
-  swapMovies.call(this); //'this' is the movie object that we select with onchange
+function updateMovieValues(movieSelected) {
+  //movieSelected = moviesSelectValue.value;
+  //swapMovies.call(this); //'this' is the movie object that we select with onchange
   currentMovieSelected.seatsOccupied = currentMovieSelected.seatsOccupied.concat(userSelectedSeats);
   userSelectedSeats = [];
 }
 
 function onMovieChangeAndTicketsSelected() {
-
   const confirmStatus = confirm(`Do you want to buy these tickets for $${(parseFloat(currentMovieSelected.price) * ticketCounter).toFixed(2)}?`);
   if (confirmStatus){
+    currentMovieSelected.seatsOccupied = currentMovieSelected.seatsOccupied.concat(userSelectedSeats);
+    userSelectedSeats = [];
 
     //reset html dropdown
-    updateMovieValues.call(this);
-    
+    //updateMovieValues.call(this);
+  
     alert(`Total was $${(parseFloat(currentMovieSelected.price) * ticketCounter).toFixed(2)}. Thank you for your purchase!`);
     updateLocalStorage();
-  } else {
-    
+    disablePurchaseButton();
+  } 
+  else {
     moviesSelectValue.value = movieSelected;
   }
 }
 
 //setting up our tickets, prices, and totals
-function swapMovies() {
-
-  updateHtmlTextValues();
-
+function swapMovies(movieSelected) {
+  //updateHtmlTextValues.call(this);
   movieSelectOnChangeCount++;
-  currentMovieSelected = movieObjects[this.value];
+  currentMovieSelected = movieObjects[movieSelected];
+
   //pass in selected movie object and change count
-  setUpSeatSection(movieObjects[this.value], movieSelectOnChangeCount);
-  ticketsPurchased = true;
-  purchaseButton.className = '';
+  setUpSeatSection(movieObjects[movieSelected], movieSelectOnChangeCount);
+  //enablePurchaseButton();
 }
 
-function updateHtmlTextValues() {
-  
+function updateHtmlTextValues(movieSelected) {
   ticketCounter = 0;
   ticketQuantityLabel.innerText = ticketCounter;
-  ticketPriceLabel.innerText = `$${movieObjects[this.value].price}`;
+  ticketPriceLabel.innerText = `$${movieObjects[movieSelected].price}`;
   totalPriceLabel.innerText = '$0.00';
 }
 
 //iterate over each seat & apply classes
 function setUpSeatSection(movie, movieSelectOnChangeCount) {
-
   let tableDataCounter = 0;
   for (let i = 0; i < seatsTableBody.children.length; i++) {
     // iterate over our table rows
-    
     const seatsTableRow = seatsTableBody.children[i];
     const numTableDataLength = seatsTableRow.children.length;
 
@@ -163,33 +160,28 @@ function selectASeat(seatTableData) {
   - push seat number to seatsOccupied
   */  
   seatTableData.addEventListener('click', function(e){
-
     if(seatTableData.className !== 'occupiedSeat'){
+
       //check if already clicked
-      //if clicked, unclick 
       const seatIDNumber = parseInt(e.target.getAttribute('id'));
 
       if (e.target.className === '') { 
-
         e.target.className = 'selectedSeat';
         userSelectedSeats.push(seatIDNumber);
         //update ticket price labels
         workTicketPrices(true);
-        resetPurchaseButton();
+        enablePurchaseButton();
       }
-
-      else if (e.target.className === 'selectedSeat'){
-
+      // seat already selected by current user ... unclick
+      else {
         e.target.className = '';
         const index = userSelectedSeats.indexOf(seatIDNumber);
         userSelectedSeats.splice(index, 1);
         if (ticketCounter > 0) {
-
           workTicketPrices(false);
         }
         if (userSelectedSeats.length === 0) {
-
-          ticketsPurchased = true;
+          disablePurchaseButton();
         }
       }  
     }
@@ -206,15 +198,13 @@ function workTicketPrices(incremental){
 }
 
 //Enable button only after first movie clicked
-purchaseButton.disabled = true; 
+disablePurchaseButton();
 
-purchaseButton.addEventListener('click', ()=> {
-
-  ticketsPurchased = true;
+purchaseButton.addEventListener('click', () => {
+  //enablePurchaseButton();
   if (userSelectedSeats.length !== 0){
-
-    purchaseButton.className = 'purchased';
     alert(`Total was $${(parseFloat(currentMovieSelected.price) * ticketCounter).toFixed(2)}. Thank you for your purchase!`);
+    disablePurchaseButton();
   }
   //push selected seats to seatsOccupied
   currentMovieSelected.seatsOccupied = currentMovieSelected.seatsOccupied.concat(userSelectedSeats);
@@ -225,7 +215,6 @@ purchaseButton.addEventListener('click', ()=> {
 
 //resets localStorage & reloads page (to clear current movie seats)
 clearLocalStorage.addEventListener('click', () => {
-
   localStorage.clear();
   movieObjects.forEach(movieObject => {
     movieObject.seatsOccupied = [];
@@ -239,7 +228,14 @@ function updateLocalStorage() {
   localStorage.setItem('movies', movieObjectsJSON);
 }
 
-function resetPurchaseButton() {
+function disablePurchaseButton() {
+  purchaseButton.disabled = true;
+  purchaseButton.classList.remove("purchase-enabled");
+  ticketsPurchased = true;
+}
+
+function enablePurchaseButton() {
+  purchaseButton.disabled = false;
+  purchaseButton.classList.add('purchase-enabled');
   ticketsPurchased = false;
-  purchaseButton.className = '';
 }

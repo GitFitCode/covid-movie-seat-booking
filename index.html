@@ -4,34 +4,49 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="seats.js" defer></script>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="build/tailwind.css">
     <title>Covid Movie Seat Booking</title>
 </head>
-<body>
-  <h1>Covid Movie Seat Booking</h1>
-  <div id="container">
-    <section id="ticketCounter">
-      <label for="movies">Pick which showing: </label>
-      <select name="movies" id="movies" >
-        <option value="" disabled selected>Movies:</option>
+<body class="bg-gray-700">
+  <div class="text-red-500 text-6xl my-0 mx-auto vertical absolute">Covid Movie</div> 
+  <div class="text-red-500 text-6xl vertical absolute right-0 top-auto">Seat Booking</div>
+  <div id="container" class="flex flex-col items-center">
+
+    <section id="ticketCounter" class="border-2 border-black w-600 p-6 m-4 text-center text-20" >
+      <select name="movies" id="movies" class="h-4 self-start bg-gray-400">
+        <option value="" disabled selected>Movie:</option>
         <option value="0">Wedding Crashers</option>
         <option value="1">Ratatouille</option>
         <option value="2">Pulp Fiction</option>
         <option value="3">Lion King</option>
         <option value="4">Vertigo</option>
       </select>
-      <section>
-        <label id="quantity">0</label>
-        <label>tickets @</label>
-        <label id="pricePerTicket">$0.00</label>
-        <label>Total:</label>
-        <label id="totalPrice">$0.00</label>
-        <br><br>
-        <button id='purchase'>Purchase Tickets</button>
-        <br><br><br><br>
-        <button id="clearLocalStorage">Clear all movie storage</button>
+      <hr>
+      <section class="text-white">
+        <div>
+          <label id="quantity">0</label>
+          <label>tickets @</label>
+          <label id="pricePerTicket">$0.00</label>
+          <label>Total:</label>
+          <label id="totalPrice">$0.00</label>
+        </div>
+        <hr>
+        <div class="flex justify-between">
+          <button id='purchase' class="border border-gray-400 p-2 rounded-md text-gray-400">Purchase Tickets</button>
+          <button id="clearLocalStorage">Clear all movie storage</button>
+        </div>
       </section>
     </section>
+
+    <div class="flex">
+      <div class="w-20 h-10 bg-purple-500 mx-3 seat-basic ">Available</div>
+      <div class="w-20 h-10 bg-purple-500 mx-3 seat-basic occupiedSeat">Occupied</div>
+      <div class="w-20 h-10 bg-purple-500 mx-3 seat-basic selectedSeat">Selected</div>
+    </div>
+
+    <div class="w-600 h-4 bg-white">Screen</div>
+
+
     <section id="seats">
       <table>
         <tbody>
