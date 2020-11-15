@@ -47,7 +47,7 @@ const purchaseButton = document.getElementById('purchase');
 const clearLocalStorage = document.getElementById('clearLocalStorage');
 
 //Non-HTML Global Variables
-//selected seats not purchased (to be pushed into seatsOccupied)`````````````````
+//selected seats not purchased (to be pushed into seatsOccupied)
 let userSelectedSeats = []; 
 let currentMovieSelected;
 let ticketCounter = 0;
@@ -64,38 +64,26 @@ let ticketsPurchased = true;
 moviesSelectValue.onchange = function() {
   const movieSelected = moviesSelectValue.value;
 
-  //no alert for first movie select
-  if (movieSelectOnChangeCount === 0) {
-    swapMovies(movieSelected);
-    updateMovieValues(movieSelected);
-    updateHtmlTextValues(movieSelected);
+  //tickets not yet purchased
+  if (!ticketsPurchased) {
+    onMovieChangeAndTicketsSelected(movieSelected);
+    disablePurchaseButton();
   }
-  else {
-    //tickets not yet purchased
-    if (!ticketsPurchased) {
-      onMovieChangeAndTicketsSelected();
-    }
-    updateHtmlTextValues(movieSelected);
-    swapMovies(movieSelected);
-    updateMovieValues(movieSelected);
-  }
+  swapMovies(movieSelected);
+  updateMovieValues(movieSelected);
+  updateTicketPrices(null);
 }
 
 function updateMovieValues(movieSelected) {
-  //movieSelected = moviesSelectValue.value;
-  //swapMovies.call(this); //'this' is the movie object that we select with onchange
   currentMovieSelected.seatsOccupied = currentMovieSelected.seatsOccupied.concat(userSelectedSeats);
   userSelectedSeats = [];
 }
 
-function onMovieChangeAndTicketsSelected() {
+function onMovieChangeAndTicketsSelected(movieSelected) {
   const confirmStatus = confirm(`Do you want to buy these tickets for $${(parseFloat(currentMovieSelected.price) * ticketCounter).toFixed(2)}?`);
   if (confirmStatus){
     currentMovieSelected.seatsOccupied = currentMovieSelected.seatsOccupied.concat(userSelectedSeats);
     userSelectedSeats = [];
-
-    //reset html dropdown
-    //updateMovieValues.call(this);
   
     alert(`Total was $${(parseFloat(currentMovieSelected.price) * ticketCounter).toFixed(2)}. Thank you for your purchase!`);
     updateLocalStorage();
@@ -103,25 +91,17 @@ function onMovieChangeAndTicketsSelected() {
   } 
   else {
     moviesSelectValue.value = movieSelected;
+    userSelectedSeats = [];
   }
 }
 
 //setting up our tickets, prices, and totals
 function swapMovies(movieSelected) {
-  //updateHtmlTextValues.call(this);
   movieSelectOnChangeCount++;
   currentMovieSelected = movieObjects[movieSelected];
 
   //pass in selected movie object and change count
   setUpSeatSection(movieObjects[movieSelected], movieSelectOnChangeCount);
-  //enablePurchaseButton();
-}
-
-function updateHtmlTextValues(movieSelected) {
-  ticketCounter = 0;
-  ticketQuantityLabel.innerText = ticketCounter;
-  ticketPriceLabel.innerText = `$${movieObjects[movieSelected].price}`;
-  totalPriceLabel.innerText = '$0.00';
 }
 
 //iterate over each seat & apply classes
@@ -146,7 +126,6 @@ function setUpSeatSection(movie, movieSelectOnChangeCount) {
       }
       // if first movie clicked
       if (movieSelectOnChangeCount === 1) {
-        //selectASeat(currentMovieSelected, seatTableData);
         selectASeat(seatTableData);
       }
     }
@@ -160,16 +139,17 @@ function selectASeat(seatTableData) {
   - push seat number to seatsOccupied
   */  
   seatTableData.addEventListener('click', function(e){
-    if(seatTableData.className !== 'occupiedSeat'){
+    //check if already clicked
+    const seatIDNumber = parseInt(e.target.getAttribute('id'));
 
-      //check if already clicked
-      const seatIDNumber = parseInt(e.target.getAttribute('id'));
-
+    //only allow clicking if unoccupied and not already in seatsOccupied (already purchased case)
+    if(seatTableData.className !== 'occupiedSeat' && currentMovieSelected.seatsOccupied.indexOf(seatIDNumber) === -1) {
+      
       if (e.target.className === '') { 
         e.target.className = 'selectedSeat';
         userSelectedSeats.push(seatIDNumber);
         //update ticket price labels
-        workTicketPrices(true);
+        updateTicketPrices(true);
         enablePurchaseButton();
       }
       // seat already selected by current user ... unclick
@@ -178,7 +158,7 @@ function selectASeat(seatTableData) {
         const index = userSelectedSeats.indexOf(seatIDNumber);
         userSelectedSeats.splice(index, 1);
         if (ticketCounter > 0) {
-          workTicketPrices(false);
+          updateTicketPrices(false);
         }
         if (userSelectedSeats.length === 0) {
           disablePurchaseButton();
@@ -191,9 +171,26 @@ function selectASeat(seatTableData) {
 
 //Other Buttons & Minor Functions:
 //updates ticket cost labels
-function workTicketPrices(incremental){
-  incremental ? ticketCounter++ : ticketCounter--;
-  ticketQuantityLabel.innerText = ticketCounter;
+function updateTicketPrices(incremental){
+  //null value corresponds to onMovieSwitch
+  if (incremental === null) {
+    ticketCounter = 0;
+  }
+  //corresponds to seat being clicked
+  else {
+    incremental ? ticketCounter++ : ticketCounter--;
+  }
+
+  let ticketString;
+  if (ticketCounter === 1) {
+    ticketString = ' ticket @';
+  }
+  else {
+    ticketString = ' tickets @';
+  }
+
+  ticketQuantityLabel.innerText = ticketCounter + ticketString;
+  ticketPriceLabel.innerText = `$${currentMovieSelected.price}`;
   totalPriceLabel.innerText = `$${(parseFloat(currentMovieSelected.price) * ticketCounter).toFixed(2)}`;
 }
 
@@ -210,7 +207,9 @@ purchaseButton.addEventListener('click', () => {
   currentMovieSelected.seatsOccupied = currentMovieSelected.seatsOccupied.concat(userSelectedSeats);
   userSelectedSeats = [];
   updateLocalStorage();
-  ticketCounter = 0;
+
+  //set ticket counter and HTML values back to 0 for already purchased case
+  updateTicketPrices(null);
 });
 
 //resets localStorage & reloads page (to clear current movie seats)
@@ -239,3 +238,22 @@ function enablePurchaseButton() {
   purchaseButton.classList.add('purchase-enabled');
   ticketsPurchased = false;
 }
+
+//let's use an IIFE
+(function randomlyPopulateOccupiedSeats() {
+  const numberOfMovies = movieObjects.length;
+  
+  //1-indexed between 1 and 38. 
+  //total table-datas (seats) could be calculated programatically
+  let randomSeatNumber;
+  
+  for (let i = 0; i < numberOfMovies; i++) {
+    //could do w/o the 0s, but clarity helps:
+    const randomSeatCount = Math.floor(Math.random() * (15 - 0) + 0);
+
+    for (let j = 0; j < randomSeatCount; j++) {
+      randomSeatNumber = Math.floor(Math.random() * (38 - 1) + 1);
+      movieObjects[i].seatsOccupied.push(randomSeatNumber);
+    }
+  }
+}())
