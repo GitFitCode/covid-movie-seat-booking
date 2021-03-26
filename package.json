@@ -1,0 +1,24 @@
+{
+  "name": "covid-movie-seat-booking",
+  "version": "1.0.0",
+  "description": "Our group project for picking seats",
+  "main": "seats.js",
+  "scripts": {
+    "build": "postcss styles.css -o build/tailwind.css"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/GitFitCode/covid-movie-seat-booking.git"
+  },
+  "author": "GitFitCode members",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/GitFitCode/covid-movie-seat-booking/issues"
+  },
+  "homepage": "https://github.com/GitFitCode/covid-movie-seat-booking#readme",
+  "dependencies": {
+    "autoprefixer": "^9.0.0",
+    "postcss-cli": "^8.2.0",
+    "tailwindcss": "^1.9.6"
+  }
+}

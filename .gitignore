@@ -1,0 +1,2 @@
+# ignore dependencies - package.json will be enough 
+/node_modules

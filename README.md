@@ -1,3 +1,10 @@
+Authors: 
+Charles Mesias
+Juan Villaman
+Dane Neves  (full author of November Updates -- marginal code fixes, major visual update)
+Justin Sineath
+Eddie Gutierrez
+
 # GitFitCode Pair Coding Challenge!
 
 ## Covid Movie Seat Booking
